@@ -62,11 +62,13 @@ var ScrollableTabView = React.createClass({
 
   goToPage(pageNumber) {
     this.setState({offsetX: -1 * (pageNumber * deviceWidth)});
+    this.props.onChangeTab &&
+      this.props.onChangeTab({i: pageNumber, ref: this.props.children[pageNumber]});
   },
 
-  renderTabOption(name) {
+  renderTabOption(name, page) {
     return (
-      <TouchableOpacity key={name}>
+      <TouchableOpacity key={name} onPress={() => this.goToPage(page)}>
          <View style={styles.tab}>
           <Text>{name}</Text>
          </View>
@@ -91,7 +93,7 @@ var ScrollableTabView = React.createClass({
     return (
       <View style={{flex: 1}}>
         <View style={styles.tabs}>
-          {this.props.children.map((child) => this.renderTabOption(child.key))}
+          {this.props.children.map((child, i) => this.renderTabOption(child.key, i))}
           <View style={tabUnderlineStyle} />
         </View>
 
@@ -133,7 +135,6 @@ var styles = StyleSheet.create({
     borderLeftWidth: 0,
     borderRightWidth: 0,
     borderBottomColor: '#ccc',
-
   },
 });
 
